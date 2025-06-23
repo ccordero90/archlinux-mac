@@ -1,4 +1,9 @@
 # archlinux-mac
+
+during installer 
+arch noapic irqpoll acpi=force nomodeset
+
+postinstall
 adding the fsck.mode=force kernel parameter
 
 more info
