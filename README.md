@@ -85,5 +85,35 @@ arch noapic irqpoll acpi=force nomodeset
 postinstall
 adding the fsck.mode=force kernel parameter
 
+/etc/fstab to "auto,user,force,rw,exec"
+
+Removing the Boot Delay
+The boot delay is caused by a couple of things:
+
+The bootloader firmware might still have old entries in it, with the default set to something that doesn’t exist.
+The bootloader itself has a timeout that can be changed, and it defaults to 5s.
+This can be managed with the efibootmgr utility. If you run it without arguments, you’ll see all the settings I mentioned:
+
+$ sudo efibootmgr
+BootCurrent: 0000
+Timeout: 5 seconds
+BootOrder: 0080
+Boot0000* ubuntu
+Boot0001* Ubuntu 14.04.1 LTS
+Boot0080* Mac OS X
+BootFFFF*
+In my case, the timeout was set to 5s, the default boot was set to an entry that no longer exists, and there was still an old OS X entry.
+
+This will get rid of the built-in timeout:
+
+$ sudo efibootmgr -t 0
+This gets rid of the extra entries (note that your numbers might be different!):
+
+$ sudo efibootmgr -b 0000 -B
+$ sudo efibootmgr -b 0080 -B
+This sets the default entry (again, the number here might be different for you):
+
+$ sudo efibootmgr -o 0001
+
 more info
 https://web.archive.org/web/20230327110759/https://heeris.id.au/2014/ubuntu-plus-mac-pure-efi-boot/
